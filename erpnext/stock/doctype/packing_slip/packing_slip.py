@@ -47,11 +47,11 @@ class PackingSlip(Document):
 			Validate if case nos overlap. If they do, recommend next case no.
 		"""
 		if not cint(self.from_case_no):
-			frappe.msgprint(_("Please specify a valid 'From Case No.'"), raise_exception=1)
+			frappe.msgprint(_("Please specify a valid 'From Package No.'"), raise_exception=1)
 		elif not self.to_case_no:
 			self.to_case_no = self.from_case_no
 		elif cint(self.from_case_no) > cint(self.to_case_no):
-			frappe.msgprint(_("'To Case No.' cannot be less than 'From Case No.'"),
+			frappe.msgprint(_("'To Package No.' cannot be less than 'From Package No.'"),
 				raise_exception=1)
 
 		res = frappe.db.sql("""SELECT name FROM `tabPacking Slip`
@@ -64,7 +64,7 @@ class PackingSlip(Document):
 				"to_case_no":self.to_case_no})
 
 		if res:
-			frappe.throw(_("""Case No(s) already in use. Try from Case No {0}""").format(self.get_recommended_case_no()))
+			frappe.throw(_("""Package No(s) already in use. Try from Package No {0}""").format(self.get_recommended_case_no()))
 
 	def validate_qty(self):
 		"""Check packed qty across packing slips and delivery note"""
