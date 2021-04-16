@@ -51,7 +51,7 @@ class PackingSlip(Document):
 		elif not self.to_case_no:
 			self.to_case_no = self.from_case_no
 		elif cint(self.from_case_no) > cint(self.to_case_no):
-			frappe.msgprint(_("'To Case No.' cannot be less than 'From Case No.'"),
+			frappe.msgprint(_("<b>To Package No.</b> cannot be less than <b>From Package No.</b>"),
 				raise_exception=1)
 
 		res = frappe.db.sql("""SELECT name FROM `tabPacking Slip`
