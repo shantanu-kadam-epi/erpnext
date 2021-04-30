@@ -903,20 +903,73 @@ erpnext.TransactionController = erpnext.taxes_and_totals.extend({
 
 	shipping_rule: function() {
 		var me = this;
-		if(this.frm.doc.shipping_rule) {
+		if(this.frm.doc.shipping_rule) {			
+			if(localStorage) {
+				var last_shipping_rule = localStorage.getItem("last_shipping_rule");					
+				localStorage.removeItem("last_shipping_rule");
+			}			
 			return this.frm.call({
 				doc: this.frm.doc,
 				method: "apply_shipping_rule",
 				callback: function(r) {
 					if(!r.exc) {
+						if(last_shipping_rule && cur_frm.doc.shipping_rule != last_shipping_rule)	{													
+							me.remove_duplicate_taxes(last_shipping_rule,"shipping_rule"); 
+								if(localStorage) {
+									localStorage.setItem("last_shipping_rule", cur_frm.doc.shipping_rule);
+									}				
+						}
+						else{
+							if(localStorage) {
+								localStorage.setItem("last_shipping_rule", cur_frm.doc.shipping_rule);
+							}
+						}                           
 						me.calculate_taxes_and_totals();
 					}
 				}
 			}).fail(() => this.frm.set_value('shipping_rule', ''));
-		}
-		else {
-			me.calculate_taxes_and_totals();
-		}
+		}		
+	},
+
+	remove_duplicate_taxes: function(last_shipping_rule,field_type) {
+			return this.frm.call({
+				method: "erpnext.controllers.accounts_controller.get_shipping_rule_account_head",
+				args: {
+					"master_doctype": frappe.meta.get_docfield(this.frm.doc.doctype, "shipping_rule",
+						this.frm.doc.name).options,
+					"master_name": last_shipping_rule
+				},
+				callback: function(r) {	
+					if(!r.exc) {
+						if(r.message.account) {	
+							if(field_type == "shipping_rule")	
+							{			
+								var tbl = cur_frm.doc.taxes || [];
+								var i = tbl.length;
+									while (i--)
+										{
+											if(tbl[i].account_head == r.message.account)
+											{
+												cur_frm.get_field("taxes").grid.grid_rows[i].remove();
+												cur_frm.refresh_fields();
+											}
+										}
+							}else{													
+								var tbl = cur_frm.doc.taxes || [];						
+								var i = tbl.length;
+									while (i--)
+									{
+										if(tbl[i].account_head != r.message.account)
+										{
+											cur_frm.get_field("taxes").grid.grid_rows[i].remove();
+											cur_frm.refresh_fields();
+										}
+									}
+							}
+						}
+					}
+				}
+			});				
 	},
 
 	set_margin_amount_based_on_currency: function(exchange_rate) {
@@ -1576,7 +1629,7 @@ erpnext.TransactionController = erpnext.taxes_and_totals.extend({
 	},
 
 	taxes_and_charges: function() {
-		var me = this;
+		var me = this;		
 		if(this.frm.doc.taxes_and_charges) {
 			return this.frm.call({
 				method: "erpnext.controllers.accounts_controller.get_taxes_and_charges",
@@ -1585,23 +1638,28 @@ erpnext.TransactionController = erpnext.taxes_and_totals.extend({
 						this.frm.doc.name).options,
 					"master_name": this.frm.doc.taxes_and_charges
 				},
-				callback: function(r) {
+				callback: function(r) {	
 					if(!r.exc) {
-						if(me.frm.doc.shipping_rule && me.frm.doc.taxes) {
-							for (let tax of r.message) {
-								me.frm.add_child("taxes", tax);
-							}
-
-							refresh_field("taxes");
-						} else {
-							me.frm.set_value("taxes", r.message);
-							me.calculate_taxes_and_totals();
+						if(me.frm.doc.shipping_rule && me.frm.doc.taxes) {	
+							me.remove_duplicate_taxes(me.frm.doc.shipping_rule,"taxes_and_charges").then(() => {
+								for (let tax of r.message) 
+									{
+									me.frm.add_child("taxes", tax);
+									}
+									refresh_field("taxes");
+									me.calculate_taxes_and_totals();
+								});	
+						} 
+						else {
+								me.frm.set_value("taxes", r.message);	
+								me.calculate_taxes_and_totals();							
 						}
+						
 					}
 				}
 			});
 		}
-	},
+	},	
 
 	tax_category: function() {
 		var me = this;
