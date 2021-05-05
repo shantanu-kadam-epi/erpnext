@@ -1351,11 +1351,3 @@ def update_child_qty_rate(parent_doctype, trans_items, parent_doctype_name, chil
 @erpnext.allow_regional
 def validate_regional(doc):
 	pass
-
-@frappe.whitelist()
-def get_shipping_rule_account_head(master_doctype, master_name):
-	if not master_name:
-		return
-	from frappe.model import default_fields
-	ship_rule = frappe.get_doc(master_doctype, master_name)	
-	return ship_rule

@@ -887,3 +887,11 @@ def get_stock_accounts(company):
 		"account_type": "Stock",
 		"company": company
 	})
+
+@frappe.whitelist()
+def get_shipping_rule_account_head(doctype, docname):
+	if not docname:
+		return
+	from frappe.model import default_fields
+	shipping_rule = frappe.get_doc(doctype, docname)
+	return shipping_rule
