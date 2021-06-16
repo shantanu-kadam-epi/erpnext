@@ -643,5 +643,7 @@ def update_stock_entry_items(location, stock_entry):
 	"""Append Item Row in Stock Entry !"""
 	item = frappe._dict()
 	update_common_item_properties(item, location)
+	if location.warehouse:
+		item.s_warehouse = location.warehouse
 	stock_entry.append('items', item)
 	return stock_entry
