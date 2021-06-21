@@ -116,10 +116,7 @@ class ShippingRule(Document):
 
 			# Check if already tax is present & add new shipping taxes
 			if doc.get("taxes"):
-				taxes_and_charges = []
-				new_tax = doc.get("taxes")
-				for d in doc.get("taxes"):
-					taxes_and_charges.append(d)
+				taxes_and_charges = doc.get("taxes")
 
 				doc.set("taxes", [])
 				doc.append("taxes", shipping_charge)
@@ -134,11 +131,9 @@ class ShippingRule(Document):
 		if not docname:
 			return
 
-		shipping_rule_accounts = frappe.get_all("Shipping Rule", fields=["account"])
-		shipping_rule_names = [data['account'] for data in shipping_rule_accounts]
+		shipping_rule_names = [rule.get('account') for rule in frappe.get_all("Shipping Rule", fields=["account"])]
 
-		to_remove = [d for d in doc.get("taxes")
-			if (d.account_head in shipping_rule_names)]
+		to_remove = [d for d in doc.get("taxes") if d.account_head in shipping_rule_names]
 
 		[ doc.get("taxes").remove(d) for d in to_remove ]
 
