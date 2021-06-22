@@ -117,25 +117,18 @@ class ShippingRule(Document):
 			# Check if already tax is present & add new shipping taxes
 			if doc.get("taxes"):
 				taxes_and_charges = doc.get("taxes")
-
-				doc.set("taxes", [])
-				doc.append("taxes", shipping_charge)
-
-				for tax in taxes_and_charges:
-					doc.append("taxes", tax)
+				doc.set("taxes", [shipping_charge] + taxes_and_charges)
 			else:
 				doc.append("taxes", shipping_charge)
 
 	# remove existing shipping rule tax by its account head from taxes table
-	def remove_existing_shipping_rule(self, doc, doctype, docname):
-		if not docname:
-			return
+	def get_existing_shipping_rule(self, doc):
 
 		shipping_rule_names = [rule.get('account') for rule in frappe.get_all("Shipping Rule", fields=["account"])]
 
-		to_remove = [d for d in doc.get("taxes") if d.account_head in shipping_rule_names]
+		existing_rule = [d for d in doc.get("taxes") if d.account_head in shipping_rule_names]
 
-		[ doc.get("taxes").remove(d) for d in to_remove ]
+		return existing_rule
 
 	def sort_shipping_rule_conditions(self):
 		"""Sort Shipping Rule Conditions based on increasing From Value"""

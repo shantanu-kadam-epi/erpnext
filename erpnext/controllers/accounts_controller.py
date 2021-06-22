@@ -451,7 +451,9 @@ class AccountsController(TransactionBase):
 	def apply_shipping_rule(self):
 		if self.shipping_rule:
 			shipping_rule = frappe.get_doc("Shipping Rule", self.shipping_rule)
-			shipping_rule.remove_existing_shipping_rule(self, "Shipping Rule", self.shipping_rule)
+			existing_rule = shipping_rule.get_existing_shipping_rule(self)
+			for d in existing_rule:
+				self.get("taxes").remove(d)
 			shipping_rule.apply(self)
 			self.calculate_taxes_and_totals()
 
@@ -933,15 +935,15 @@ def get_taxes_and_charges(master_doctype, master_name, doc=None):
 	return taxes_and_charges
 
 # remove existing Sales Taxes and Charges by its account head from taxes table
-def remove_existing_sales_taxes(doc_taxes):
+def remove_existing_sales_taxes(taxes):
 	sales_taxes_names = [rule.get('account_head') for rule in frappe.get_all("Sales Taxes and Charges", fields=["account_head"])]
 
-	if doc_taxes:
-		to_remove = [d for d in doc_taxes if d['account_head'] in sales_taxes_names]
+	if taxes:
+		to_remove = [d for d in taxes if d['account_head'] in sales_taxes_names]
 
-		[ doc_taxes.remove(d) for d in to_remove ]
+		[ taxes.remove(d) for d in to_remove ]
 
-	return doc_taxes
+	return taxes
 
 
 def validate_conversion_rate(currency, conversion_rate, conversion_rate_label, company):
