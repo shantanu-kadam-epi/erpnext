@@ -941,7 +941,7 @@ def remove_existing_sales_taxes(taxes):
 	if taxes:
 		to_remove = [d for d in taxes if d['account_head'] in sales_taxes_names]
 
-		[ taxes.remove(d) for d in to_remove ]
+		[taxes.remove(d) for d in to_remove]
 
 	return taxes
 
