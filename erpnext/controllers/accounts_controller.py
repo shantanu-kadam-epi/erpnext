@@ -949,17 +949,18 @@ def get_taxes_and_charges(master_doctype, master_name=None, doc=None):
 					del tax[fieldname]
 
 			taxes_and_charges.append(tax)
-
 	return taxes_and_charges
 
 # remove existing Sales Taxes and Charges by its account head from taxes table
 def remove_existing_sales_taxes(taxes):
-	sales_taxes_names = [rule.get('account_head') for rule in frappe.get_all("Sales Taxes and Charges", fields=["account_head"])]
+	sales_taxes_names = [{'charge_type': rule.get('charge_type'), 'account_head':rule.get('account_head')} for rule in frappe.get_all("Sales Taxes and Charges", filters = {"parenttype": "Sales Taxes and Charges Template"}, fields=["charge_type","account_head"])]
+
 	if taxes:
 		to_remove = []
 		for d in taxes:
-			if d['charge_type'] != "Actual" and d['account_head'] in sales_taxes_names:
-				to_remove.append(d)
+			for t in sales_taxes_names:
+				if d['charge_type'] == t['charge_type'] and d['account_head']  == t['account_head']:
+					to_remove.append(d)
 
 		[taxes.remove(d) for d in to_remove]
 	return taxes
