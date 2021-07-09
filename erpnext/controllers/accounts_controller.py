@@ -452,7 +452,7 @@ class AccountsController(TransactionBase):
 		existing_rule = self.get_existing_shipping_rule(self)
 		[self.get("taxes").remove(d) for d in existing_rule]
 
-		if 	self.shipping_rule:
+		if self.shipping_rule:
 			shipping_rule = frappe.get_doc("Shipping Rule", self.shipping_rule)
 			shipping_rule.apply(self)
 		else:
@@ -959,7 +959,7 @@ def remove_existing_sales_taxes(taxes):
 		to_remove = []
 		for d in taxes:
 			for t in sales_taxes_names:
-				if d['charge_type'] == t['charge_type'] and d['account_head']  == t['account_head']:
+				if d['charge_type'] == t['charge_type'] and d['account_head'] == t['account_head']:
 					to_remove.append(d)
 
 		[taxes.remove(d) for d in to_remove]
