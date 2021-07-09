@@ -452,7 +452,7 @@ class AccountsController(TransactionBase):
 		existing_rule = self.get_existing_shipping_rule(self)
 		[self.get("taxes").remove(d) for d in existing_rule]
 
-		if 	self.shipping_rule:
+		if self.shipping_rule:
 			shipping_rule = frappe.get_doc("Shipping Rule", self.shipping_rule)
 			shipping_rule.apply(self)
 		else:
