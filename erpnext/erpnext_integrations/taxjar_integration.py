@@ -12,6 +12,7 @@ TAX_ACCOUNT_HEAD = frappe.db.get_single_value("TaxJar Settings", "tax_account_he
 SHIP_ACCOUNT_HEAD = frappe.db.get_single_value("TaxJar Settings", "shipping_account_head")
 TAXJAR_CREATE_TRANSACTIONS = frappe.db.get_single_value("TaxJar Settings", "taxjar_create_transactions")
 TAXJAR_CALCULATE_TAX = frappe.db.get_single_value("TaxJar Settings", "taxjar_calculate_tax")
+TAXJAR_ENABLED = frappe.db.get_single_value("TaxJar Settings", "enabled")
 SUPPORTED_COUNTRY_CODES = ["AT", "AU", "BE", "BG", "CA", "CY", "CZ", "DE", "DK", "EE", "ES", "FI",
 	"FR", "GB", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO",
 	"SE", "SI", "SK", "US"]
@@ -35,7 +36,7 @@ def get_client():
 def create_transaction(doc, method):
 	"""Create an order transaction in TaxJar"""
 
-	if not TAXJAR_CREATE_TRANSACTIONS:
+	if not TAXJAR_CREATE_TRANSACTIONS or not TAXJAR_ENABLED:
 		return
 
 	client = get_client()
@@ -70,7 +71,7 @@ def create_transaction(doc, method):
 def delete_transaction(doc, method):
 	"""Delete an existing TaxJar order transaction"""
 
-	if not TAXJAR_CREATE_TRANSACTIONS:
+	if not TAXJAR_CREATE_TRANSACTIONS or not TAXJAR_ENABLED:
 		return
 
 	client = get_client()
@@ -119,7 +120,7 @@ def get_tax_data(doc):
 
 
 def set_sales_tax(doc, method):
-	if not TAXJAR_CALCULATE_TAX:
+	if not TAXJAR_CALCULATE_TAX or not TAXJAR_ENABLED:
 		return
 
 	if not doc.items:
