@@ -29,7 +29,7 @@ def get_client():
 		api_url = taxjar.SANDBOX_API_URL
 
 	if api_key and api_url:
-		client =  taxjar.Client(api_key=api_key, api_url=api_url)
+		client = taxjar.Client(api_key=api_key, api_url=api_url)
 		client.set_api_config('headers', {
 			'x-api-version': '2020-08-07'
 		})
