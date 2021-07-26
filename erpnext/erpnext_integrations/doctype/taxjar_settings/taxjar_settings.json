@@ -92,11 +92,11 @@
    "default": "0",
    "fieldname": "enabled",
    "fieldtype": "Check",
-   "label": "Enable"
+   "label": "Enabled"
   }
  ],
  "issingle": 1,
- "modified": "2021-07-23 01:24:39.286138",
+ "modified": "2021-07-26 07:35:19.655979",
  "modified_by": "Administrator",
  "module": "ERPNext Integrations",
  "name": "TaxJar Settings",
