@@ -29,7 +29,7 @@
    "fieldname": "api_key",
    "fieldtype": "Password",
    "in_list_view": 1,
-   "label": "Live API Key",
+   "label": "Live API Token",
    "reqd": 1
   },
   {
@@ -64,7 +64,7 @@
   {
    "fieldname": "sandbox_api_key",
    "fieldtype": "Password",
-   "label": "Sandbox API Key"
+   "label": "Sandbox API Token"
   },
   {
    "fieldname": "configuration_cb",
