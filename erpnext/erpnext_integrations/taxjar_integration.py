@@ -42,7 +42,7 @@ def get_client():
 def create_transaction(doc, method):
 	"""Create an order transaction in TaxJar"""
 
-	if not TAXJAR_CREATE_TRANSACTIONS or not TAXJAR_ENABLED:
+	if not TAXJAR_CREATE_TRANSACTIONS:
 		return
 
 	client = get_client()
@@ -77,7 +77,7 @@ def create_transaction(doc, method):
 def delete_transaction(doc, method):
 	"""Delete an existing TaxJar order transaction"""
 
-	if not TAXJAR_CREATE_TRANSACTIONS or not TAXJAR_ENABLED:
+	if not TAXJAR_CREATE_TRANSACTIONS:
 		return
 
 	client = get_client()
@@ -127,7 +127,7 @@ def get_tax_data(doc):
 
 
 def set_sales_tax(doc, method):
-	if not TAXJAR_CALCULATE_TAX or not TAXJAR_ENABLED:
+	if not TAXJAR_CALCULATE_TAX:
 		return
 
 	if not doc.items:
