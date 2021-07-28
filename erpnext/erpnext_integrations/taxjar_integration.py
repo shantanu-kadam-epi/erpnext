@@ -7,6 +7,7 @@ import frappe
 from erpnext import get_default_company
 from frappe import _
 from frappe.contacts.doctype.address.address import get_company_address
+import json
 
 TAX_ACCOUNT_HEAD = frappe.db.get_single_value("TaxJar Settings", "tax_account_head")
 SHIP_ACCOUNT_HEAD = frappe.db.get_single_value("TaxJar Settings", "shipping_account_head")
@@ -275,11 +276,11 @@ def create_taxjar_integration_request(doc, method):
 	else:
 		status = "Completed"
 
-	data = str(doc.as_dict())
-	integration_request = frappe.get_doc({
+	data = json.dumps(doc.as_dict())
+	frappe.get_doc({
 		"doctype": "Integration Request",
 		"integration_type": "Host",
-		"integration_request_service": "Taxjar",
+		"integration_request_service": "TaxJar",
 		"status": status,
 		"reference_doctype": doc.doctype,
 		"reference_docname": doc_name,
