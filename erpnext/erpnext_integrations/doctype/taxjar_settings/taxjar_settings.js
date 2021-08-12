@@ -14,8 +14,8 @@ frappe.ui.form.on('TaxJar Settings', {
 					"is_group": 0,
 					"company": row.company_name
 				}
-			}
-		},
+			};
+		};
 		frm.fields_dict["company_account"].grid.get_field("shipping_account_head").get_query = function(doc, cdt, cdn) {
 			const row = locals[cdt][cdn];
 			return {
@@ -23,8 +23,8 @@ frappe.ui.form.on('TaxJar Settings', {
 					"is_group": 0,
 					"company": row.company_name
 				}
-			}
-		}
+			};
+		};
 	}
 
 });

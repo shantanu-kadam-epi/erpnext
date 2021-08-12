@@ -277,16 +277,15 @@ def get_line_items(doc):
 		return
 	account_heads = get_account_heads(doc.company)
 	TAX_ACCOUNT_HEAD = account_heads['TAX_ACCOUNT_HEAD']
-
-	sales_tax = sum([tax.tax_amount for tax in doc.taxes if tax.account_head == TAX_ACCOUNT_HEAD])
 	discout_percent = 0.0
+
 	if doc.discount_amount:
 		discout_percent = ((doc.discount_amount / doc.total) * 100)
 
 	line_items = []
 	for item in doc.items:
 		if discout_percent:
-			item.discount_amount = ((item.price_list_rate * discout_percent) / 100 )
+			item.discount_amount = ((item.price_list_rate * discout_percent) / 100)
 		line_item = {
 			'id': item.name,
 			'quantity': item.qty,
@@ -299,7 +298,7 @@ def get_line_items(doc):
 
 def get_account_heads(current_company):
 	company_account_heads = frappe.get_all("TaxJar Company", filters={"company_name": current_company}, fields=["tax_account_head","shipping_account_head"])
-	account_heads = dict();
+	account_heads = dict()
 	if not company_account_heads:
 		account_heads['TAX_ACCOUNT_HEAD'] = None
 		account_heads['SHIP_ACCOUNT_HEAD'] = None
