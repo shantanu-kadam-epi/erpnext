@@ -275,8 +275,7 @@ def sanitize_error_response(response):
 def get_line_items(doc):
 	if not doc.items:
 		return
-	account_heads = get_account_heads(doc.company)
-	TAX_ACCOUNT_HEAD = account_heads['TAX_ACCOUNT_HEAD']
+
 	discout_percent = 0.0
 
 	if doc.discount_amount:
