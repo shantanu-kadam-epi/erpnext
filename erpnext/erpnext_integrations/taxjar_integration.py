@@ -141,7 +141,7 @@ def set_sales_tax(doc, method):
 	TAX_ACCOUNT_HEAD = account_heads['TAX_ACCOUNT_HEAD']
 
 	if not TAX_ACCOUNT_HEAD:
-		frappe.throw("Please add accounts in taxjar setting for company " + doc.company)
+		frappe.throw(_("Please add accounts in taxjar setting for company " + doc.company))
 
 	if sales_tax_exempted:
 		for tax in doc.taxes:
@@ -287,6 +287,7 @@ def get_line_items(doc):
 			item.discount_amount = ((item.price_list_rate * discout_percent) / 100)
 		line_item = {
 			'id': item.name,
+			'description': item.item_name,
 			'quantity': item.qty,
 			'unit_price': item.price_list_rate,
 			'discount': round(item.discount_amount * item.qty)
