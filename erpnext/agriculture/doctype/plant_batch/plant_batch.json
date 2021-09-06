@@ -5,6 +5,8 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "company",
+  "section_break_1",
   "title",
   "plant_tag",
   "strain",
@@ -40,9 +42,7 @@
   "packaged_count",
   "column_break_37",
   "harvested_count",
-  "destroyed_count",
-  "company",
-  "section_break_1"
+  "destroyed_count"
  ],
  "fields": [
   {
@@ -273,7 +273,7 @@
    "fieldtype": "Section Break"
   }
  ],
- "modified": "2021-09-06 05:10:30.899532",
+ "modified": "2021-09-06 06:02:47.204337",
  "modified_by": "Administrator",
  "module": "Agriculture",
  "name": "Plant Batch",
