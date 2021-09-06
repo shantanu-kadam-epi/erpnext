@@ -40,7 +40,9 @@
   "packaged_count",
   "column_break_37",
   "harvested_count",
-  "destroyed_count"
+  "destroyed_count",
+  "company",
+  "section_break_1"
  ],
  "fields": [
   {
@@ -258,9 +260,20 @@
    "fieldname": "growth_date",
    "fieldtype": "Date",
    "label": "Growth Date"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break"
   }
  ],
- "modified": "2020-10-31 07:15:25.941787",
+ "modified": "2021-09-06 05:10:30.899532",
  "modified_by": "Administrator",
  "module": "Agriculture",
  "name": "Plant Batch",
