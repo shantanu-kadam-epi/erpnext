@@ -15,4 +15,4 @@ frappe.query_reports["Pending Deliveries"] = {
 			"default": frappe.defaults.get_default("year_end_date")
 		}
 	]
-}
+};
